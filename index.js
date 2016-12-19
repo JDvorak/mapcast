@@ -1,7 +1,5 @@
-var flatten = require('flat');
 var _ = require('lodash')
 var xtend = require('xtend');
-var unflatten = require('flat').unflatten;
 var nestedVal = require('./components/utilities/nestedVal')
 var match = require('./components/match')
 var apply = require('./components/apply')
@@ -13,7 +11,6 @@ function mapcast (obj, cast) {
     }, obj)
   }
 
-  var flatCast = flatten(cast.from);
   var updateObj = {}
   recurse(obj, [])
 
@@ -22,7 +19,7 @@ function mapcast (obj, cast) {
     if (_.isObject(subObj)) {
       subObj = nestedVal(obj, keys) || {}
 
-      if (match(subObj, flatCast)) {
+      if (match(subObj, cast)) {
         subObj = apply(subObj, cast.from, cast.to)
         if (!subKey) {
           updateObj = subObj

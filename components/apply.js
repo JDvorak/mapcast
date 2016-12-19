@@ -1,7 +1,5 @@
-var flatten = require('flat');
 var _ = require('lodash')
 var xtend = require('filter-xtend');
-var unflatten = require('flat').unflatten;
 var nestedVal = require('./utilities/nestedVal')
 
 module.exports = function apply (source, transformSource, transformTarget) {

@@ -1,6 +1,6 @@
 {
   "name": "mapcast",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "An object transformation power tool",
   "main": "index.js",
   "scripts": {

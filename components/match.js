@@ -1,14 +1,15 @@
 var flatten = require('flat');
 var _ = require('lodash')
 var xtend = require('xtend');
-var unflatten = require('flat').unflatten;
 var nestedVal = require('./utilities/nestedVal')
 
 /*
  Match if all keys in a cast definition are present in the subobject and that the values match
 */
-module.exports = function match (obj, flatCast) {
+module.exports = function match (obj, cast) {
   var value, everything;
+  var flatCast = flatten(cast.from);
+
   if (Object.keys(obj).length < 1) {
     return false;
   }
