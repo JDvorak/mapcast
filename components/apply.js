@@ -4,59 +4,70 @@ var xtend = require('filter-xtend');
 var unflatten = require('flat').unflatten;
 var nestedVal = require('./utilities/nestedVal')
 
-module.exports = function apply (obj, transformSource, transformTarget) {
-  var newObj = {};
+module.exports = function apply (source, transformSource, transformTarget) {
+  var target = {};
   var transfers = [];
 
   if (_.isString(transformTarget)) {
     var path = (transformTarget.match(/^\$(.+)/) || [])[1]
-    return nestedVal(obj, path)
+    return nestedVal(source, path)
   }
 
   for (var tKey in transformTarget) {
     if (_.isString(transformTarget[tKey])) {
       var path = (transformTarget[tKey].match(/^\$(.+)/) || [])[1]
       if (tKey == '$$') {
-          if (path) {
-            newObj = xtend(newObj, nestedVal(obj, path))
-          } else if (path === '$') {
-            newObj = xtend(newObj, obj)
-          } 
+        if (path) {
+          if (path === '$') {
+            target = xtend(target, source)
+          } else {
+            target = xtend(target, nestedVal(source, path))
+          }
+        } 
       } else {
-        if (transformTarget[tKey] === '$$') {
-          newObj[tKey] = obj[tKey];
-        } else if (path) {
-          newObj[tKey] = nestedVal(obj, path);
-        } else if (transformSource[tKey] == '$$' || transformSource[tKey] == null) {
-          newObj[tKey] = transformTarget[tKey];
-        } else if (obj[tKey].match(transformSource[tKey])) {
-          newObj[tKey] = transformTarget[tKey];
+        if (path) {
+          if (path === '$') {
+            target[tKey] = source[tKey];
+          } else {
+            target[tKey] = nestedVal(source, path);
+          }
+        } else {
+          if (transformSource[tKey] == '$$' || transformSource[tKey] == null) {
+            target[tKey] = transformTarget[tKey];
+          } else if (source[tKey].match(transformSource[tKey])) {
+            target[tKey] = transformTarget[tKey];
+          }
         }
       }
     } else if (_.isArray(transformTarget[tKey])) {
-      if (transformTarget[tKey].length === 1) { //TODO: Make this extensible to any length array.
+      //TODO: Rewrite to support extensible arrays.
+      if (transformTarget[tKey].length === 1) { 
         if (transformTarget[tKey][0] == '$$') {
-          var extendObj = xtend({}, obj, function (target, source, key, index) {
+          var extension = xtend({}, source, function (target, source, key, index) {
             return index === 0 || transformSource[key] == null
           })
-          newObj[tKey] = [extendObj]
+          target[tKey] = [extension]
         } else if (_.isString(transformTarget[tKey][0])) {
           var path = (transformTarget[tKey][0].match(/^\$(.+)/) || [])[1]
           if (path) {
-            newObj[tKey] = [nestedVal(obj, path)]
+            target[tKey] = [nestedVal(source, path)]
           }
         }
       }
     } else if (_.isObject(transformTarget[tKey])) {
       for (var key in transformTarget[tKey]) {
-        newObj[tKey] = apply(obj, transformSource, transformTarget[tKey])
+        target[tKey] = apply(source, transformSource, transformTarget[tKey])
       }
+    } else {
+      //TODO: Support non-string values.
     }
   }
 
-  newObj = xtend(newObj, obj, function (target, source, key, index) {
-    return index === 0 || (transformSource[key] == null && transformSource['$$'] == null)
-  })
+  if (transformSource['$$'] == null) {
+    target = xtend(target, source, function (target, source, key, index) {
+      return index === 0 || (transformSource[key] == null)
+    })
+  }
 
-  return newObj
+  return target
 }

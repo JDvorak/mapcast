@@ -19,6 +19,7 @@ module.exports = function match (obj, flatCast) {
     if (key.match(/\$\$$/)) {
       continue; //TODO: Support 'any key, so long as it has this value'
     } else {
+      //TODO: Support the special case of arrays
       value = nestedVal(obj, key);
       if (value !== undefined) {
         if (flatCast[key] === '$$' || value.match(flatCast[key])) {
