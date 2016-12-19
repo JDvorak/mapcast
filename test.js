@@ -68,7 +68,7 @@ var cast = [
     type: 'Module',
     children: ['$$']
   }
-}
+},
 // {
 //   from: {
 //     type: 'Module',
@@ -95,6 +95,16 @@ var cast = [
 //   to: {
 //     'sourceType': "module",
 //     '$$': '$children.0'
+//   }
+// },
+// {
+//   from: {
+//     type: 'Program',
+//     children: '$$'
+//   },
+//   to: {
+//     type: '$type',
+//     body: ['$children.0']
 //   }
 // }
 ]

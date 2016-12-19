@@ -1,6 +1,6 @@
 var flatten = require('flat');
 var _ = require('lodash')
-var xtend = require('xtend');
+var xtend = require('filter-xtend');
 var unflatten = require('flat').unflatten;
 var nestedVal = require('./utilities/nestedVal')
 
@@ -18,19 +18,12 @@ module.exports = function apply (obj, transformSource, transformTarget) {
       var path = (transformTarget[tKey].match(/^\$(.+)/) || [])[1]
       if (tKey == '$$') {
           if (path) {
-            var extendObj = nestedVal(obj, path)
-            for (var extendKey in extendObj) {
-              newObj[extendKey] = extendObj[extendKey];
-            }
-          } else if (path === '$' && transformSource[extendKey] == null) {
-            for (var extendKey in obj) {
-              newObj[extendKey] = obj[extendKey];
-            }
-          } else {
-          }
+            newObj = xtend(newObj, nestedVal(obj, path))
+          } else if (path === '$') {
+            newObj = xtend(newObj, obj)
+          } 
       } else {
         if (transformTarget[tKey] === '$$') {
-
           newObj[tKey] = obj[tKey];
         } else if (path) {
           newObj[tKey] = nestedVal(obj, path);
@@ -41,14 +34,11 @@ module.exports = function apply (obj, transformSource, transformTarget) {
         }
       }
     } else if (_.isArray(transformTarget[tKey])) {
-      if (transformTarget[tKey].length === 1) { //TODO: Make this extensible to multiple cases.
-        var extendObj = {};
+      if (transformTarget[tKey].length === 1) { //TODO: Make this extensible to any length array.
         if (transformTarget[tKey][0] == '$$') {
-          for (var extendKey in obj) {
-            if (transformSource[extendKey] == null) {
-              extendObj[extendKey] = obj[extendKey]
-            }
-          }
+          var extendObj = xtend({}, obj, function (target, source, key, index) {
+            return index === 0 || transformSource[key] == null
+          })
           newObj[tKey] = [extendObj]
         } else if (_.isString(transformTarget[tKey][0])) {
           var path = (transformTarget[tKey][0].match(/^\$(.+)/) || [])[1]
@@ -64,12 +54,9 @@ module.exports = function apply (obj, transformSource, transformTarget) {
     }
   }
 
-  for (var extendKey in obj) {
-    if (transformSource[extendKey] == null && transformSource['$$'] == null) {
-      newObj[extendKey] = obj[extendKey];
-    }
-
-  }
+  newObj = xtend(newObj, obj, function (target, source, key, index) {
+    return index === 0 || (transformSource[key] == null && transformSource['$$'] == null)
+  })
 
   return newObj
 }

@@ -9,7 +9,6 @@ var apply = require('./components/apply')
 function mapcast (obj, cast) {
   if (_.isArray(cast)) {
     return cast.reduce(function(obj, cast) {
-      console.log(obj, cast)
       return mapcast(obj, cast)
     }, obj)
   }
@@ -45,7 +44,7 @@ function mapcast (obj, cast) {
 }
 
 function reverse(obj, cast) {
-
+  //TBD
 }
 
 
