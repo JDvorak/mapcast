@@ -92,35 +92,37 @@ var exampleCast = [{
 
 ```json
 {
- "type": "Module",
- "children": [
-  {
-   "type": "Program",
-   "children": {
-    "location": {
-     "start": {
-      "line": 4,
-      "column": 0
-     },
-     "end": {
-      "line": 7,
-      "column": 3
-     }
-    },
-    "type": "ExpressionStatement"
-   },
-   "location": {
-    "start": {
-     "line": 4,
-     "column": 0
-    },
-    "end": {
-     "line": 7,
-     "column": 3
+  "type": "Module",
+  "children": [
+    {
+      "type": "Program",
+      "children": [
+        {
+          "type": "ExpressionStatement",
+          "location": {
+            "start": {
+              "line": 4,
+              "column": 0
+            },
+            "end": {
+              "line": 7,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "location": {
+        "start": {
+          "line": 4,
+          "column": 0
+        },
+        "end": {
+          "line": 7,
+          "column": 3
+        }
+      }
     }
-   }
-  }
- ]
+  ]
 }
 ```
 
