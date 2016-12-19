@@ -49,8 +49,13 @@ module.exports = function apply (obj, transformSource, transformTarget) {
               extendObj[extendKey] = obj[extendKey]
             }
           }
+          newObj[tKey] = [extendObj]
+        } else if (_.isString(transformTarget[tKey][0])) {
+          var path = (transformTarget[tKey][0].match(/^\$(.+)/) || [])[1]
+          if (path) {
+            newObj[tKey] = [nestedVal(obj, path)]
+          }
         }
-        newObj[tKey] = [extendObj]
       }
     } else if (_.isObject(transformTarget[tKey])) {
       for (var key in transformTarget[tKey]) {

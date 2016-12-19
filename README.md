@@ -73,7 +73,7 @@ var exampleCast = [{
   },
   to: {
     'type': '$type',
-    'children': '$body',
+    'children': ['$body']
   }
 },
 {

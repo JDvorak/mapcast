@@ -35,43 +35,6 @@ var first = {
     }
   ]
 }
-var first = {
-  "type": "Program",
-  "range": [
-    9,
-    115
-  ],
-  "sourceType": "module",
-  "loc": {
-    "start": {
-      "line": 4,
-      "column": 0
-    },
-    "end": {
-      "line": 7,
-      "column": 3
-    }
-  },
-  "body": [
-    {
-      "type": "ExpressionStatement",
-      "range": [
-        9,
-        115
-      ],
-      "loc": {
-        "start": {
-          "line": 4,
-          "column": 0
-        },
-        "end": {
-          "line": 7,
-          "column": 3
-        }
-      }
-    }
-  ]
-}
 
 var cast = [
 {
@@ -93,7 +56,7 @@ var cast = [
   },
   to: {
     'type': '$type',
-    'children': '$body',
+    'children': ['$body'],
   }
 },
 {
