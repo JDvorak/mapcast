@@ -1,8 +1,14 @@
 var _ = require('lodash')
 var xtend = require('filter-xtend');
-var nestedVal = require('./utilities/nestedVal')
+var nestedVal = require('../utilities/nestedVal')
 
-module.exports = function apply (source, transformSource, transformTarget) {
+module.exports = function makeTransformer (cast) {
+  return function transform(obj) {
+    return _apply(obj, cast.from, cast.to)
+  }
+}
+
+function _apply (source, transformSource, transformTarget) {
   var target = {};
   var transfers = [];
 
@@ -54,7 +60,7 @@ module.exports = function apply (source, transformSource, transformTarget) {
       }
     } else if (_.isObject(transformTarget[tKey])) {
       for (var key in transformTarget[tKey]) {
-        target[tKey] = apply(source, transformSource, transformTarget[tKey])
+        target[tKey] = _apply(source, transformSource, transformTarget[tKey])
       }
     } else {
       //TODO: Support non-string values.
