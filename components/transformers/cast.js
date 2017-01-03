@@ -4,7 +4,7 @@ var nestedVal = require('../utilities/nestedVal')
 
 module.exports = function makeTransformer (cast) {
   return function transform(obj) {
-    return _apply(obj, cast.from, cast.to)
+    return _apply(obj, cast.pre, cast.post)
   }
 }
 

@@ -38,43 +38,43 @@ var first = {
 
 var cast = [
 {
-  from: {
+  pre: {
     loc: {
       'start': '$$',
       'end': '$$'
     },
     range: '$$'
   },
-  to: {
+  post: {
     location: '$loc'
   }
 }, 
 {
-  from: {
+  pre: {
     type: 'Program',
     body: '$$'
   },
-  to: {
+  post: {
     'type': '$type',
     'children': ['$body'],
   }
 },
 {
-  from: {
+  pre: {
     sourceType: 'module',
     '$$': '$$'
   },
-  to: {
+  post: {
     type: 'Module',
     children: ['$$']
   }
 },
 // {
-//   from: {
+//   pre: {
 //     type: 'Module',
 //     'children': '$$'
 //   },
-//   to: {
+//   post: {
 //     root: {
 //       type: '$type',
 //       children: '$children'
@@ -82,27 +82,27 @@ var cast = [
 //   }
 // },
 // {
-//   from: {
+//   pre: {
 //     root: '$$'
 //   },
-//   to: '$root'
+//   post: '$root'
 // },
 // {
-//   from: {
+//   pre: {
 //     type: 'Module',
 //     children: "$$",
 //   },
-//   to: {
+//   post: {
 //     'sourceType': "module",
 //     '$$': '$children.0'
 //   }
 // },
 // {
-//   from: {
+//   pre: {
 //     type: 'Program',
 //     children: '$$'
 //   },
-//   to: {
+//   post: {
 //     type: '$type',
 //     body: ['$children.0']
 //   }

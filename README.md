@@ -7,7 +7,7 @@ A power tool for managing JSON transformations. In REST interfaces, version chan
 
 ## CAUTION:
 ***EXPERIMENTAL***
-This tool will be changing a lot in the next few weeks. Do not rely on it until the package.json version increases to 1.0.0
+This tool will be changing a lot in the next few weeks. Do not rely on it until the package.json version no longer is marked experimental
 
 ### Usage
 *Example Target JSON:*
@@ -55,33 +55,33 @@ This tool will be changing a lot in the next few weeks. Do not rely on it until 
 ```javascript
 var transformedObject;
 var exampleCast = [{
-  from: {
+  pre: {
     loc: {
       'start': '$$',
       'end': '$$'
     },
     range: '$$'
   },
-  to: {
+  post: {
     location: '$loc'
   }
 }, 
 {
-  from: {
+  pre: {
     type: 'Program',
     body: '$$'
   },
-  to: {
+  post: {
     'type': '$type',
     'children': ['$body']
   }
 },
 {
-  from: {
+  pre: {
     sourceType: 'module',
     '$$': '$$'
   },
-  to: {
+  post: {
     type: 'Module',
     children: ['$$']
   }
@@ -127,15 +127,15 @@ var exampleCast = [{
 ```
 
 ### Explanation
-Casts are objects with pairs of To and From keys. The From functions as both a precondition for whether a node matches a rule to apply. A node is represented by an ordinary javascript Object. After matching a precondition of the From, the To functions as a specification of the final format of the object. 
+Casts are objects with pairs of `Pre` and `Post` keys. The `Pre` functions as the precondition, if a subtree matches the precondition then it will transform it such that it matches the `Post` key.
 
-For a From block to match a node, all keys of the From must exist in the node. Keys whose values are `$$` will match to anything, while values that either do not start with '$' or are not strings will be used to match for value equivalence. 
+For a `Pre` block to match a node, all keys of the `Pre` must exist in the node. Keys whose values are `$$` will match to anything, while values that either do not start with '$' or are not strings will be used to match for value equivalence. 
 
-In a To block, keys of `$$` will extend the object with all the keys of source object. Values which begin with `$` refer to paths on the source object, and simply copy the values. Finally, any value which does not begin with `$` will be assumed to be the literal value provided. 
+In a `Post` block, keys of `$$` will extend the object with all the keys of source object. Values which begin with `$` refer to paths on the source object, and simply copy the values. Finally, any value which does not begin with `$` will be assumed to be the literal value provided. 
 
 Two gotchas:
 - `$$` as a string in an array will be interpreted as the entire source object. 
-- Any keys specified in the From block **MUST BE SPECIFIED** in the To block, otherwise they will be discarded.
+- Any keys specified in the From block **MUST BE SPECIFIED** in the `Post` block, otherwise they will be discarded.
 
 ### TODO
  - [ ] Extend match to support non-string values. Whoops!

@@ -14,7 +14,7 @@ module.exports = function makeMatcher (cast) {
 
 function _match (obj, cast) {
   var value, everything;
-  var flatCast = flatten(cast.from);
+  var flatCast = flatten(cast.pre);
   if (Object.keys(obj).length < 1) {
     return false;
   }
