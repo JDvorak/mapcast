@@ -5,11 +5,11 @@ module.exports = function nestedVal (o, s, v) {
   if (s instanceof Array) {
     s = s.join('.')
   }
-  
-  if (!s) return o;
 
   s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
   s = s.replace(/^\./, '');           // strip a leading dot
+  
+  if (!s) return o;
 
   return s.split('.').reduce(
     function dive (obj, prop) { 

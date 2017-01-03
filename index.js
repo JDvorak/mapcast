@@ -1,8 +1,10 @@
 var _ = require('lodash')
 var xtend = require('xtend');
 var nestedVal = require('./components/utilities/nestedVal')
-var match = require('./components/match')
+var matcher = require('./components/match')
 var apply = require('./components/apply')
+var walker = require('./components/walk')
+
 
 function mapcast (obj, cast) {
   if (_.isArray(cast)) {
@@ -11,31 +13,18 @@ function mapcast (obj, cast) {
     }, obj)
   }
 
-  var updateObj = {}
-  recurse(obj, [])
-
-  function recurse (subObj, keys) {
-    var subKey = keys.join('.');
-    if (_.isObject(subObj)) {
-      subObj = nestedVal(obj, keys) || {}
-
-      if (match(subObj, cast)) {
-        subObj = apply(subObj, cast.from, cast.to)
-        if (!subKey) {
-          updateObj = subObj
-        } else {
-          nestedVal(updateObj, subKey, subObj)
-        }
-      } 
-
-      for (var key in subObj) {
-        recurse(subObj[key], keys.concat([key]))
-      }
-
-    } else if (_.isArray(subObj)) {
-        obj.forEach((subObj, index) => {recurse(subObj, keys.concat([index]))})
-    }
+  //TODO: Update Apply and Transform functions
+  function match (subObj) {
+    return matcher(subObj, cast)
   }
+
+  function transform (subObj) {
+    return apply(subObj, cast.from, cast.to)
+  }
+
+  var walk = walker(match, transform)
+
+  var updateObj = walk(obj)
 
   return updateObj
 }
@@ -46,3 +35,4 @@ function reverse(obj, cast) {
 
 
 module.exports = mapcast
+
