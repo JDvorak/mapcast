@@ -23,10 +23,11 @@ function toGlob (key) {
 }
 
 function matchedValue(obj, key, value) {
-  return Object.keys(obj)
+  return Object.keys(flatten(obj))
     .filter(each => minimatch(each, toGlob(key)))
-    .filter(each => nestedVal(obj, each) === value)
+    .filter(each => (value === '$$') || (nestedVal(obj, each) === value))
 }
+
 
 function _match (obj, cast) {
   var value, everything;
@@ -39,7 +40,7 @@ function _match (obj, cast) {
   everything = true;
 
   for (var key in flatCast) {
-    if (key.match(/^\$/gi)) {
+    if (key.match(/\$/gi)) {
       let matches = matchedValue(obj, key, flatCast[key])
       if (matches.length <= 0) {
         everything = false
