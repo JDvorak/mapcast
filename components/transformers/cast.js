@@ -44,7 +44,7 @@ function _apply (source, transformSource, transformTarget) {
         }
       }
     } else if (_.isArray(transformTarget[tKey])) {
-      //TODO: Rewrite to support extensible arrays.
+
       if (transformTarget[tKey].length === 1) { 
         if (transformTarget[tKey][0] == '$$') {
           var extension = xtend({}, source, function (target, source, key, index) {
@@ -63,15 +63,16 @@ function _apply (source, transformSource, transformTarget) {
         target[tKey] = _apply(source, transformSource, transformTarget[tKey])
       }
     } else {
-      //TODO: Support non-string values.
+      console.error("Weird")
     }
   }
 
-  if (transformSource['$$'] == null) {
-    target = xtend(target, source, function (target, source, key, index) {
-      return index === 0 || (transformSource[key] == null)
-    })
-  }
+  // This looks fundamentally wrong
+  // if (transformSource['$$'] == null) {
+  //   target = xtend(target, source, function (target, source, key, index) {
+  //     return index === 0 || (transformSource[key] == null)
+  //   })
+  // }
 
   return target
 }
