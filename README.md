@@ -7,7 +7,7 @@ A power tool for managing JSON transformations. In REST interfaces, version chan
 
 ## CAUTION:
 ***EXPERIMENTAL***
-This tool will be changing a lot in the next few weeks. Do not rely on it until the package.json version no longer is marked experimental
+
 
 ### Usage
 *Example Target JSON:*
